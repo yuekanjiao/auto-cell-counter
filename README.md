@@ -8,7 +8,7 @@ Plugin Auto Cell Counter was written to do cell counting for retinal organoids i
 
 The cells in a retinal organoid often form clamps (a), thresholding followed by doing watershed does not segment the cells. However the cells can be separated by checking their peaks. First the image is smoothed (b) using a Gaussian filter, and the peaks of the cells as shown in the suface plot (c) are picked in (d). A peak is picked if its prominence is above the set prominence. Choosing the right filter and prominence parameters plugin Auto Cell Counter can pick one peak for almost all the cells.       
 
-Peaks in the background may also be detected (d). The cell and background peaks are differentiated by thresholding (e). Segmented cells are shown in (f).
+Peaks in the background (arrow pointed in(d)) may also be detected. The cell and background peaks are differentiated by thresholding (e). Segmented cells are shown in (f).
 
 **Parameters:**
 
