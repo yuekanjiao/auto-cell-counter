@@ -410,14 +410,14 @@ public class Auto_Cell_Counter implements PlugIn, ActionListener,
                 histWhite[ipWhite0.get(i, j)]++;
             }
         }
-        blueThresh = getInflection1(histBlue);
-        greenThresh = getInflection1(histGreen);
-        redThresh = getInflection1(histRed);
-        whiteThresh = getInflection1(histWhite);
+        blueThresh = getInflection(histBlue);
+        greenThresh = getInflection(histGreen);
+        redThresh = getInflection(histRed);
+        whiteThresh = getInflection(histWhite);
 
     }
 
-    public int getInflection0(int[] histArray) {
+    public int getInflection(int[] histArray) {
         //where histArray1's going down gets slower.   
         int length = histArray.length;
         int[] histArray1 = new int[length];
@@ -429,62 +429,38 @@ public class Auto_Cell_Counter implements PlugIn, ActionListener,
         for (int index = 2; index < (length - 2); index++) {
             histArray2[index] = histArray1[index + 1] - histArray1[index - 1];
         }
-        int indexMax = 0;
+        int maxIndex = 0;
         int max = 0;
         for (int index = 0; index < length; index++) {
             if (histArray[index] > max) {
-                indexMax = index;
+                maxIndex = index;
                 max = histArray[index];
             }
         }
-        int indexInfl1 = indexMax;
-        if (indexInfl1 < 1) {
-            indexInfl1 = 1;
-        }
-        while (histArray1[indexInfl1] > 0) {
-            indexInfl1++;
-        }
-        if (indexInfl1 < 2) {
-            indexInfl1 = 2;
-        }
-        int indexInfl2 = indexInfl1;
-        while (histArray2[indexInfl2] < 0) {
-            indexInfl2++;
-        }
-        return indexInfl2;
-    }
 
-    public int getInflection1(int[] histArray) {
-        //where histArray's going down gets slower.   
-        int length = histArray.length;
-        int[] histArray1 = new int[length];
+        if (maxIndex < 1) {
+            maxIndex = 1;
+        }
+        int index1 = maxIndex;
+        while (histArray1[index1] > 0) {
+            index1++;
+        }
+        if (index1 < 2) {
+            index1 = 2;
+        }
+        int index2 = index1;
+        while (histArray2[index2] < 0) {
+            index2++;
+        }
+        int startIndex = index2;
+        while (!(histArray2[index2] < 0)) {
+            index2++;
+        }
+        int endIndex = index2;
 
-        for (int index = 1; index < (length - 1); index++) {
-            histArray1[index] = histArray[index + 1] - histArray[index - 1];
-        }
-        int indexMax = 0;
-        int max = 0;
-        for (int index = 0; index < length; index++) {
-            if (histArray[index] > max) {
-                indexMax = index;
-                max = histArray[index];
-            }
-        }
-        int indexInfl1 = indexMax;
-        if (indexInfl1 < 1) {
-            indexInfl1 = 1;
-        }
-        while (histArray1[indexInfl1] > 0) {
-            indexInfl1++;
-        }
-        if (indexInfl1 < 2) {
-            indexInfl1 = 2;
-        }
-        while ((double) histArray1[indexInfl1 + 1] / histArray1[indexInfl1] < 0.5) {
-            indexInfl1++;
-        }
+        // take the middle of positive 2nd derivative as relflection point
+        return (int) Math.round((startIndex + endIndex) / 2.0);
 
-        return indexInfl1;
     }
 
     public void getBlueMask() {
